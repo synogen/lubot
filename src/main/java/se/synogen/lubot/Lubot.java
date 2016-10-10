@@ -21,7 +21,7 @@ public class Lubot {
 	private static String auth;
 	
 	// TODO
-	// - statistics about users
+	// - statistics about users (actively check every few minutes if the user list has changed since no join event seems to exist)
 	
 	public static void main(String[] args) throws IOException {
 		// load configuration from file
