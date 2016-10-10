@@ -41,7 +41,6 @@ public class IrcEventHandler extends ListenerAdapter {
 			event.respond("The local time is " + LocalDateTime.now().format(formatter));
 		} else if (event.getMessage().startsWith("!uptime")) {
 			event.respond("The stream has been up for " + DurationFormatUtils.formatDurationWords(Duration.between(START_TIME, LocalDateTime.now()).toMillis(), true, false) + " (since " + START_TIME.format(formatter) + ")");
-			;
 		}
 	}
 	
