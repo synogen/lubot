@@ -20,8 +20,11 @@ public class Lubot {
 	private static String user;
 	private static String auth;
 	
+	// TODO
+	// - statistics about users
+	
 	public static void main(String[] args) throws IOException {
-		//load configuration from file
+		// load configuration from file
 		System.out.println("Loading configuration...");
 		File configFile = new File("config.txt");
 		if (configFile.exists()) {
@@ -36,7 +39,7 @@ public class Lubot {
 		}
 		
 		
-		//init configuration
+		// init configuration
 		Configuration config = new Configuration.Builder()
 				.addServer("irc.twitch.tv")
 				.setAutoReconnect(true)
@@ -49,6 +52,7 @@ public class Lubot {
 				.addListener(new IrcEventHandler())
 				.buildConfiguration();
 				
+		// start bot
 		PircBotX lubot = new PircBotX(config);
 		try {
 			System.out.println("Connecting...");
