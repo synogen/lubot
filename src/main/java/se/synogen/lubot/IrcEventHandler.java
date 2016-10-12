@@ -30,14 +30,30 @@ public class IrcEventHandler extends ListenerAdapter {
 	@Override
 	public void onJoin(JoinEvent event) throws Exception {
 		if (event.getChannel().getName().equals("#" + Lubot.getUser())) {
-			Log.log(event.getUser().getNick() + " has joined");
+			String nick = event.getUser().getNick();
+			Log.log(nick + " has joined");
+			
+			if (!Lubot.getUsers().containsKey(nick)) {
+				UserStatistics statistics = new UserStatistics(nick);
+				statistics.startTrackingTime();
+				Lubot.getUsers().put(nick, statistics);
+			} else {
+				UserStatistics statistics = Lubot.getUsers().get(nick);
+				statistics.startTrackingTime();
+			}
 		}
 	}
 	
 	@Override
 	public void onPart(PartEvent event) throws Exception {
 		if (event.getChannel().getName().equals("#" + Lubot.getUser())) {
-			Log.log(event.getUser().getNick() + " has left");
+			String nick = event.getUser().getNick();
+			Log.log(nick + " has left");
+			
+			if (Lubot.getUsers().containsKey(nick)) {
+				UserStatistics statistics = Lubot.getUsers().get(nick);
+				statistics.stopTrackingTime();
+			}
 		}
 	}
 	
@@ -48,7 +64,12 @@ public class IrcEventHandler extends ListenerAdapter {
 	
 	@Override
 	public void onGenericMessage(GenericMessageEvent event) throws Exception {
-		Log.log(event.getUser().getNick() + ": " + event.getMessage());
+		String nick = event.getUser().getNick();
+		Log.log(nick + ": " + event.getMessage());
+		if (Lubot.getUsers().containsKey(nick)) {
+			UserStatistics statistics = Lubot.getUsers().get(nick);
+			statistics.addCharactersWritten(event.getMessage().length());
+		}
 		if (event.getMessage().startsWith("!hello")) {
 			event.respond("Why hello there!");
 		} else if (event.getMessage().startsWith("!lutime")) {

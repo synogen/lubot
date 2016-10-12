@@ -2,8 +2,13 @@ package se.synogen.lubot;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
 
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -16,14 +21,16 @@ import org.pircbotx.exception.IrcException;
  *
  */
 public class Lubot {
-	// test
+
 	private static String user;
 	private static String auth;
+	
+	private static HashMap<String, UserStatistics> users;
 	
 	// TODO
 	// - statistics about users (actively check every few minutes if the user list has changed since no join event seems to exist)
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// load configuration from file
 		Log.log("Loading configuration...");
 		File configFile = new File("config.txt");
@@ -37,7 +44,6 @@ public class Lubot {
 			Log.log("No configuration found");
 			System.exit(0);
 		}
-		
 		
 		// init configuration
 		Configuration config = new Configuration.Builder()
@@ -54,6 +60,15 @@ public class Lubot {
 				.addAutoJoinChannel("#" + user)
 				.addListener(new IrcEventHandler())
 				.buildConfiguration();
+		
+		// load user statistics
+		if (new File("userstatistics").exists()) {
+			ObjectInputStream input = new ObjectInputStream(new FileInputStream("userstatistics"));
+			users = (HashMap<String, UserStatistics>)input.readObject();
+			input.close();
+		} else {
+			users = new HashMap<String, UserStatistics>();
+		}
 				
 		// start bot
 		PircBotX lubot = new PircBotX(config);
@@ -66,6 +81,10 @@ public class Lubot {
 			e.printStackTrace();
 		} finally {
 			Log.log("Exiting lubot...");
+			// write user statistics
+			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("userstatistics"));
+			output.writeObject(users);
+			output.close();
 			lubot.close();
 		}
 	}
@@ -74,4 +93,7 @@ public class Lubot {
 		return user;
 	}
 
+	public static HashMap<String, UserStatistics> getUsers() {
+		return users;
+	}
 }
