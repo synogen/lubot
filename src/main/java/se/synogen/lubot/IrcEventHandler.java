@@ -69,6 +69,11 @@ public class IrcEventHandler extends ListenerAdapter {
 		if (Lubot.getUsers().containsKey(nick)) {
 			UserStatistics statistics = Lubot.getUsers().get(nick);
 			statistics.addCharactersWritten(event.getMessage().length());
+		} else {
+			UserStatistics statistics = new UserStatistics(nick);
+			statistics.startTrackingTime();
+			Lubot.getUsers().put(nick, statistics);
+			statistics.addCharactersWritten(event.getMessage().length());
 		}
 		if (event.getMessage().startsWith("!hello")) {
 			event.respond("Why hello there!");

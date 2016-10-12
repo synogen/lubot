@@ -3,6 +3,7 @@ package se.synogen.lubot;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class Lubot {
 	// TODO
 	// - statistics about users (actively check every few minutes if the user list has changed since no join event seems to exist)
 	
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
+	public static void init() throws IOException, ClassNotFoundException {
 		// load configuration from file
 		Log.log("Loading configuration...");
 		File configFile = new File("config.txt");
@@ -70,6 +71,9 @@ public class Lubot {
 			users = new HashMap<String, UserStatistics>();
 		}
 				
+		// shutdown hook for writing statistics
+		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+		
 		// start bot
 		PircBotX lubot = new PircBotX(config);
 		try {
@@ -81,12 +85,28 @@ public class Lubot {
 			e.printStackTrace();
 		} finally {
 			Log.log("Exiting lubot...");
-			// write user statistics
-			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("userstatistics"));
-			output.writeObject(users);
-			output.close();
 			lubot.close();
 		}
+	}
+	
+	private static class ShutdownThread extends Thread {
+		@Override
+		public void run() {
+			try {
+				Lubot.writeUserStatistics();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private static void writeUserStatistics() throws FileNotFoundException, IOException {
+		// write user statistics
+		ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("userstatistics"));
+		output.writeObject(users);
+		output.close();
 	}
 	
 	public static String getUser() {
@@ -96,4 +116,5 @@ public class Lubot {
 	public static HashMap<String, UserStatistics> getUsers() {
 		return users;
 	}
+	
 }
