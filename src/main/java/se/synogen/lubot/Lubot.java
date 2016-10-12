@@ -31,7 +31,7 @@ public class Lubot {
 	private static HashMap<String, UserStatistics> users = new HashMap<String, UserStatistics>();
 	
 	// TODO
-	// - statistics about users (actively check every few minutes if the user list has changed since no join event seems to exist)
+	// - log chat to file (be careful to log rest of chat when lubot quits!)
 	
 	public static void init(GUI gui) throws IOException, ClassNotFoundException {
 		Lubot.gui = gui;
