@@ -73,4 +73,8 @@ public class UserStatistics implements Serializable {
 			timeTracker = null;
 		}
 	}
+	
+	public boolean isTracked() {
+		return timeTracker != null && timeTracker.isAlive();
+	}
 }

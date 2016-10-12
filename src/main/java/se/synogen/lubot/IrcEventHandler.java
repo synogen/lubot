@@ -37,9 +37,11 @@ public class IrcEventHandler extends ListenerAdapter {
 				UserStatistics statistics = new UserStatistics(nick);
 				statistics.startTrackingTime();
 				Lubot.getUsers().put(nick, statistics);
+				((GUI.NickListModel)Lubot.getGui().getListChatUsers().getModel()).fireContentsChanged();
 			} else {
 				UserStatistics statistics = Lubot.getUsers().get(nick);
 				statistics.startTrackingTime();
+				((GUI.NickListModel)Lubot.getGui().getListChatUsers().getModel()).fireContentsChanged();
 			}
 		}
 	}
@@ -53,6 +55,7 @@ public class IrcEventHandler extends ListenerAdapter {
 			if (Lubot.getUsers().containsKey(nick)) {
 				UserStatistics statistics = Lubot.getUsers().get(nick);
 				statistics.stopTrackingTime();
+				((GUI.NickListModel)Lubot.getGui().getListChatUsers().getModel()).fireContentsChanged();
 			}
 		}
 	}
@@ -68,11 +71,14 @@ public class IrcEventHandler extends ListenerAdapter {
 		Log.log(nick + ": " + event.getMessage());
 		if (Lubot.getUsers().containsKey(nick)) {
 			UserStatistics statistics = Lubot.getUsers().get(nick);
+			statistics.startTrackingTime();
+			((GUI.NickListModel)Lubot.getGui().getListChatUsers().getModel()).fireContentsChanged();
 			statistics.addCharactersWritten(event.getMessage().length());
 		} else {
 			UserStatistics statistics = new UserStatistics(nick);
 			statistics.startTrackingTime();
 			Lubot.getUsers().put(nick, statistics);
+			((GUI.NickListModel)Lubot.getGui().getListChatUsers().getModel()).fireContentsChanged();
 			statistics.addCharactersWritten(event.getMessage().length());
 		}
 		if (event.getMessage().startsWith("!hello")) {

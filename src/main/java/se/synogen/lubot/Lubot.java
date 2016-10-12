@@ -26,12 +26,16 @@ public class Lubot {
 	private static String user;
 	private static String auth;
 	
-	private static HashMap<String, UserStatistics> users;
+	private static GUI gui;
+	
+	private static HashMap<String, UserStatistics> users = new HashMap<String, UserStatistics>();
 	
 	// TODO
 	// - statistics about users (actively check every few minutes if the user list has changed since no join event seems to exist)
 	
-	public static void init() throws IOException, ClassNotFoundException {
+	public static void init(GUI gui) throws IOException, ClassNotFoundException {
+		Lubot.gui = gui;
+		
 		// load configuration from file
 		Log.log("Loading configuration...");
 		File configFile = new File("config.txt");
@@ -70,6 +74,7 @@ public class Lubot {
 		} else {
 			users = new HashMap<String, UserStatistics>();
 		}
+		((GUI.NickListModel)Lubot.getGui().getListChatUsers().getModel()).fireContentsChanged();
 				
 		// shutdown hook for writing statistics
 		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
@@ -115,6 +120,10 @@ public class Lubot {
 
 	public static HashMap<String, UserStatistics> getUsers() {
 		return users;
+	}
+	
+	public static GUI getGui() {
+		return gui;
 	}
 	
 }
