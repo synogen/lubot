@@ -77,4 +77,12 @@ public class UserStatistics implements Serializable {
 	public boolean isTracked() {
 		return timeTracker != null && timeTracker.isAlive();
 	}
+	
+	public Duration getTotalChannelTime() {
+		return totalChannelTime;
+	}
+	
+	public Long getTotalCharactersWritten() {
+		return totalCharactersWritten;
+	}
 }

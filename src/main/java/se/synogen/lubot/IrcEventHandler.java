@@ -87,6 +87,13 @@ public class IrcEventHandler extends ListenerAdapter {
 			event.respond("The local time is " + LocalDateTime.now().format(formatter));
 		} else if (event.getMessage().startsWith("!uptime")) {
 			event.respond("The stream has been up for " + DurationFormatUtils.formatDurationWords(Duration.between(START_TIME, LocalDateTime.now()).toMillis(), true, false) + " (since " + START_TIME.format(formatter) + ")");
+		} else if (event.getMessage().startsWith("!stats")) {
+			if (Lubot.getUsers().containsKey(nick)) {
+				UserStatistics stats = Lubot.getUsers().get(nick);
+				event.respond("You have been in stream chat for a total of " + DurationFormatUtils.formatDurationWords(stats.getTotalChannelTime().toMillis(), true, false) + ". During this time you have written a total of " + stats.getTotalCharactersWritten() + " characters.");				
+			} else {
+				event.respond("ERROR: No stats were found for you.");
+			}
 		}
 	}
 	
