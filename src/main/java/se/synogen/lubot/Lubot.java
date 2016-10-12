@@ -16,7 +16,7 @@ import org.pircbotx.exception.IrcException;
  *
  */
 public class Lubot {
-
+	// test
 	private static String user;
 	private static String auth;
 	
