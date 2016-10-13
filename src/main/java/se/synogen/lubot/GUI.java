@@ -18,7 +18,7 @@ import java.awt.Dimension;
 public class GUI {
 
 	private JFrame frmLubot;
-	private JList listChatUsers;
+	private JList<String> listChatUsers;
 
 	/**
 	 * Launch the application.
@@ -79,7 +79,7 @@ public class GUI {
 		});
 		frmLubot.getContentPane().add(btnExit, BorderLayout.SOUTH);
 		
-		listChatUsers = new JList();
+		listChatUsers = new JList<String>();
 		listChatUsers.setPreferredSize(new Dimension(100, 0));
 		listChatUsers.setModel(new NickListModel());
 		listChatUsers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -88,12 +88,14 @@ public class GUI {
 		
 	}
 
-	public JList getListChatUsers() {
+	public JList<String> getListChatUsers() {
 		return listChatUsers;
 	}
 	
 	public class NickListModel extends AbstractListModel<String>
 	{
+		private static final long serialVersionUID = 1L;
+		
 		public void fireContentsChanged() {
 			super.fireContentsChanged(this, 0, getSize());
 		}
