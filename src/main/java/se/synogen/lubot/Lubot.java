@@ -33,6 +33,7 @@ public class Lubot {
 	// TODO
 	// - log chat to file (be careful to log rest of chat when lubot quits!)
 	
+	@SuppressWarnings("unchecked")
 	public static void init(GUI gui) throws IOException, ClassNotFoundException {
 		Log.setLogFile(new File("log.txt"));
 		
