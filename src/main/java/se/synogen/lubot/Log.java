@@ -18,7 +18,8 @@ public class Log {
 		String logtext = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()) + " " + text;
 		System.out.println(logtext);
 		if (guiLog != null) {
-			guiLog.append(logtext + "\n");
+			guiLog.append("\n" + logtext);
+			guiLog.setCaretPosition(guiLog.getDocument().getLength());
 		}
 		if (logFile != null) {
 			if (!logFile.exists()) {

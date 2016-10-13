@@ -1,24 +1,26 @@
 package se.synogen.lubot;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
+
 import javax.swing.AbstractListModel;
-import java.awt.Dimension;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
 
 public class GUI {
 
 	private JFrame frmLubot;
 	private JList<String> listChatUsers;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -66,11 +68,6 @@ public class GUI {
 		frmLubot.setBounds(100, 100, 450, 300);
 		frmLubot.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JTextArea txtChatLog = new JTextArea();
-		txtChatLog.setEditable(false);
-		frmLubot.getContentPane().add(txtChatLog, BorderLayout.CENTER);
-		Log.setGuiLog(txtChatLog);
-		
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -85,7 +82,16 @@ public class GUI {
 		listChatUsers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		frmLubot.getContentPane().add(listChatUsers, BorderLayout.EAST);
 		
+		JTextArea txtChatLog = new JTextArea();
+		txtChatLog.setEditable(false);
 		
+		scrollPane = new JScrollPane();
+		scrollPane.setAutoscrolls(true);
+		scrollPane.add(txtChatLog);
+		scrollPane.setViewportView(txtChatLog);
+		
+		frmLubot.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		Log.setGuiLog(txtChatLog);
 	}
 
 	public JList<String> getListChatUsers() {
