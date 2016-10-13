@@ -34,6 +34,8 @@ public class Lubot {
 	// - log chat to file (be careful to log rest of chat when lubot quits!)
 	
 	public static void init(GUI gui) throws IOException, ClassNotFoundException {
+		Log.setLogFile(new File("log.txt"));
+		
 		Lubot.gui = gui;
 		
 		// load configuration from file
