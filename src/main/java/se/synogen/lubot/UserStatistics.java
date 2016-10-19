@@ -3,7 +3,6 @@ package se.synogen.lubot;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class UserStatistics implements Serializable {
 
@@ -52,12 +51,16 @@ public class UserStatistics implements Serializable {
 						try {
 							Thread.sleep(10000);
 							LocalDateTime now = LocalDateTime.now();
-							addChannelTime(Duration.between(lastTrackedTime, now));
+							if (lastTrackedTime != null) {
+								addChannelTime(Duration.between(lastTrackedTime, now));								
+							}
 							lastTrackedTime = now;
 						} catch (InterruptedException e) {
 							// add accumulated time before final exit
-							LocalTime now = LocalTime.now();
-							addChannelTime(Duration.between(lastTrackedTime, now));
+							LocalDateTime now = LocalDateTime.now();
+							if (lastTrackedTime != null) {
+								addChannelTime(Duration.between(lastTrackedTime, now));								
+							}
 							lastTrackedTime = null;
 						}
 						
