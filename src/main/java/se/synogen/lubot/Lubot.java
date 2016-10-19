@@ -112,8 +112,11 @@ public class Lubot {
 	
 	private static void writeUserStatistics() throws FileNotFoundException, IOException {
 		// write user statistics
+		for (UserStatistics stats : getUsers().values()) {
+			stats.stopTrackingTime();
+		}
 		ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("userstatistics"));
-		output.writeObject(users);
+		output.writeObject(getUsers());
 		output.close();
 	}
 	

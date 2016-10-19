@@ -2,11 +2,12 @@ package se.synogen.lubot;
 
 import java.io.Serializable;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class UserStatistics implements Serializable {
 
-	private static final long serialVersionUID = 1;
+	private static final long serialVersionUID = 2;
 
 	private String nick;
 	
@@ -14,7 +15,7 @@ public class UserStatistics implements Serializable {
 	
 	private Long totalCharactersWritten = 0l;
 		
-	private LocalTime lastTrackedTime;
+	private LocalDateTime lastTrackedTime;
 	
 	
 	private transient Thread timeTracker;
@@ -43,21 +44,21 @@ public class UserStatistics implements Serializable {
 		if (timeTracker != null && timeTracker.isAlive()) {
 			// already tracking
 		} else {
-			lastTrackedTime = LocalTime.now();
+			lastTrackedTime = LocalDateTime.now();
 			timeTracker = new Thread(new Runnable() {
 				
 				public void run() {
 					while (true) {
 						try {
-							Thread.sleep(1000);
-							LocalTime now = LocalTime.now();
+							Thread.sleep(10000);
+							LocalDateTime now = LocalDateTime.now();
 							addChannelTime(Duration.between(lastTrackedTime, now));
 							lastTrackedTime = now;
 						} catch (InterruptedException e) {
 							// add accumulated time before final exit
 							LocalTime now = LocalTime.now();
 							addChannelTime(Duration.between(lastTrackedTime, now));
-							lastTrackedTime = now;
+							lastTrackedTime = null;
 						}
 						
 					}
