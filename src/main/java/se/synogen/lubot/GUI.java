@@ -83,6 +83,8 @@ public class GUI {
 		frmLubot.getContentPane().add(listChatUsers, BorderLayout.EAST);
 		
 		JTextArea txtChatLog = new JTextArea();
+		txtChatLog.setWrapStyleWord(true);
+		txtChatLog.setLineWrap(true);
 		txtChatLog.setEditable(false);
 		
 		scrollPane = new JScrollPane();
